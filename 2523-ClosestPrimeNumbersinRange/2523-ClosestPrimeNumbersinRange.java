@@ -1,61 +1,43 @@
 class Solution {
+    private boolean isPrime(int n) {
+        if (n < 2) return false;
+        if (n == 2) return true;
+        if (n % 2 == 0) return false;
 
-    public int[] closestPrimes(int left, int right) {
-        List<Integer> primeNumbers = new ArrayList<>();
-
-        // Find all prime numbers in the given range
-        for (int candidate = left; candidate <= right; candidate++) {
-            if (candidate % 2 == 0 && candidate > 2) {
-                continue;
-            }
-            if (isPrime(candidate)) {
-                // If a twin prime (or [2, 3]) is found, return immediately
-                if (
-                    !primeNumbers.isEmpty() &&
-                    candidate <= primeNumbers.get(primeNumbers.size() - 1) + 2
-                ) {
-                    return new int[] {
-                        primeNumbers.get(primeNumbers.size() - 1),
-                        candidate,
-                    };
-                }
-                primeNumbers.add(candidate);
-            }
-        }
-
-        // If fewer than 2 primes exist, return {-1, -1}
-        if (primeNumbers.size() < 2) {
-            return new int[] { -1, -1 };
-        }
-
-        // Find the closest prime pair
-        int[] closestPair = new int[] { -1, -1 };
-        int minDifference = 1000000;
-        for (int index = 1; index < primeNumbers.size(); index++) {
-            int difference =
-                primeNumbers.get(index) - primeNumbers.get(index - 1);
-            if (difference < minDifference) {
-                minDifference = difference;
-                closestPair = new int[] {
-                    primeNumbers.get(index - 1),
-                    primeNumbers.get(index),
-                };
-            }
-        }
-
-        return closestPair;
-    }
-
-    // Function to check if a number is prime
-    private boolean isPrime(int number) {
-        if (number == 1) {
-            return false;
-        }
-        for (int divisor = 2; divisor <= (int) Math.sqrt(number); divisor++) {
-            if (number % divisor == 0) {
+        for (int i = 3; i <= Math.sqrt(n); i += 2) {
+            if (n % i == 0) {
                 return false;
             }
         }
         return true;
+    }
+
+    public int[] closestPrimes(int left, int right) {
+        int n1 = -1, n2 = -1;
+        int min = Integer.MAX_VALUE;
+        int[] res = {-1, -1};
+
+        for (int i = left; i <= right; i++) {
+            if (isPrime(i)) {
+                if (n1 == -1) {
+                    n1 = i;
+                } else if (n2 == -1) {
+                    n2 = i;
+                    min = n2 - n1;
+                    res[0] = n1;
+                    res[1] = n2;
+                } else {
+                    if (i - n2 < min) {
+                        min = i - n2;
+                        res[0] = n2;
+                        res[1] = i;
+                    }
+                    n1 = n2;
+                    n2 = i;
+                }
+            }
+        }
+
+        return res;
     }
 }
