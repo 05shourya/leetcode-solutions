@@ -1,14 +1,9 @@
 class Solution {
     public boolean divideArray(int[] nums) {
-        Map<Integer , Integer> map = new HashMap<>(); 
-
-        for(int num : nums){
-            map.put(num , map.getOrDefault(num , 0) + 1); 
-        }
+        Arrays.sort(nums);
         
-        
-        for (int count : map.values()) {
-            if (count % 2 != 0) {
+        for (int i = 0; i < nums.length; i += 2) {
+            if (nums[i] != nums[i + 1]) {
                 return false;
             }
         }
