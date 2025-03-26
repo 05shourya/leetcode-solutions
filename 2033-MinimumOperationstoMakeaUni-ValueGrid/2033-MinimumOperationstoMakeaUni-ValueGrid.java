@@ -1,4 +1,4 @@
-// Last updated: 3/26/2025, 10:42:42 PM
+// Last updated: 3/26/2025, 10:42:57 PM
 class Solution {
     public int minOperations(int[][] grid, int x) {
         int[] arr = new int[grid.length * grid[0].length];
